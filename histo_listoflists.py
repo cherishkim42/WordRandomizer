@@ -1,4 +1,4 @@
-# To run in terminal, type: "python3" + "histo_listoflists.py" + file name
+# To run in terminal, type: "python3" + "histo_listoflists.py" + file name!
 import sys
 
 def histogram():
