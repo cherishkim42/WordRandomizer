@@ -47,21 +47,21 @@ class LinkedList(object):
         # Now list contains items from all nodes
         return items  # O(1) time to return list
 
-    def is_empty(self):
+    def is_empty(self): #O(1), checking if self.head == None, constant time
         """Return a boolean indicating whether this linked list is empty."""
         return self.head is None
 
-    def length(self):
+    def length(self): #O(n), loop over each node and increment +1, then return; directly proportional to the number of loops required. This fxn could have alg. analysis of O(1) if it got value of .size property instead. (car vs. teleport)
         """Return the length of this linked list by traversing its nodes.
-        TODO: Running time: O(???) Why and under what conditions?"""
+        TODO: Running time: O(n) because numerical variable. Why and under what conditions?"""
         counter = 0 #initialize counter
         for item in self.items():
             counter += 1
         return counter
 
-    def append(self, item):
+    def append(self, item): #O(1), change tail.next and .tail - not dependent on any dynamic factors
         """Insert the given item at the tail of this linked list.
-        TODO: Running time: O(???) Why and under what conditions?"""
+        TODO: Running time: O(1) Why and under what conditions?"""
         # TODO: Create new node to hold given item
         # TODO: Append node after tail, if it exists
         node = Node(item)
@@ -72,7 +72,7 @@ class LinkedList(object):
             self.tail.next = node #Previous tail points us in the direction of new node
             self.tail = node #Set tail to node
 
-    def prepend(self, item):
+    def prepend(self, item): #O(1), change .head and node.next - not dependent on any dynamic factors
         """Insert the given item at the head of this linked list.
         TODO: Running time: O(???) Why and under what conditions?"""
         node = Node(item)
@@ -83,7 +83,7 @@ class LinkedList(object):
             node.next = self.head
             self.head = node
 
-    def find(self, quality):
+    def find(self, quality): #Best: O(1) if looking for item @ or near head node. Worst: O(n) if looking for item @ or near tail OR not in list at all
         """Return an item from this linked list satisfying the given quality.
         TODO: Best case running time: O(???) Why and under what conditions?
         TODO: Worst case running time: O(???) Why and under what conditions?"""
@@ -101,7 +101,7 @@ class LinkedList(object):
                     current_node = current_node.next
             return current_node
 
-    def delete(self, item):
+    def delete(self, item): #Size: 0 -> error, 1 -> easy, 2 -> extra stuff that either makes it the best or worst just like in find fxn
         """Delete the given item from this linked list, or raise ValueError.
         TODO: Best case running time: O(???) Why and under what conditions?
         TODO: Worst case running time: O(???) Why and under what conditions?"""
