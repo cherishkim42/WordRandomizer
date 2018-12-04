@@ -64,21 +64,23 @@ class HashTable(object):
             entry_count += bucket.length()
         return entry_count
 
-    def contains(self, key):
+    def contains(self, key): #Worst case: O(n) -> while loop. n = # of items (nodes) in linked list. 0(1) -> if loop. Combined it's O(n + 1) --> O(n) because 1 is smol. Here, n = average length of lists (load factor: [# key value entries]/[# buckets]. Best case: O(1) if looking for item @ or near head node.
         """Return True if this hash table contains the given key, or False.
         TODO: Running time: O(???) Why and under what conditions?"""
         # TODO: Find bucket where given key belongs
         # TODO: Check if key-value entry exists in bucket
         index = self._bucket_index(key)
         bucket = self.buckets[index]
-        node = bucket.head
-        if node is not None and node.data[0] == key: #Hmm is it in there?
-            return True #contains fxn says: Yes it is!
-        return False #contains fxn says: No it isn't :(
+        current_node = bucket.head
+        while current_node is not None:
+            if current_node.data[0] == key: # [0] for key and [1] for value bc tuple inside node.data
+                return True
+            current_node = current_node.next # Set to next node so that while loop continues
+        return False #false is returned if current_node is None OR if node.data[0] !== key
 
-    def get(self, key):
+    def get(self, key): #Running time: same as contains
         """Return the value associated with the given key, or raise KeyError.
-        TODO: Running time: O(???) Why and under wheeat conditions?"""
+        TODO: Running time: O(???) Why and under what conditions?"""
         # TODO: Find bucket where given key belongs
         # TODO: Check if key-value entry exists in bucket
         # TODO: If found, return value associated with given key
@@ -86,9 +88,9 @@ class HashTable(object):
         # Hint: raise KeyError('Key not found: {}'.format(key))
         index = self._bucket_index(key)
         bucket = self.buckets[index]
-        node = bucket.head
-        if node is not None and node.data[0] == key:
-            return node.data[1]
+        current_node = bucket.head
+        while current_node is not None:
+            return current_node.data[1]
         raise KeyError('Key not found: {}'.format(key))
 
     def set(self, key, value):
@@ -100,10 +102,14 @@ class HashTable(object):
         # TODO: Otherwise, insert given key-value entry into bucket
         index = self._bucket_index(key)
         bucket = self.buckets[index]
-        node = bucket.head
-        if node is not None and node.data[0] == key:
-            node.data = (key, value)
-        bucket.append((key, value))
+        current_node = bucket.head
+        if current_node is None:
+            bucket.append((key, value))
+        else:
+            current_node.data = (key, value)
+        # while current_node is not None:
+        #     current_node.data = (key, value)
+        # bucket.append((key, value))
 
     def delete(self, key):
         """Delete the given key from this hash table, or raise KeyError.
@@ -115,10 +121,17 @@ class HashTable(object):
         # Hint: raise KeyError('Key not found: {}'.format(key))
         index = self._bucket_index(key)
         bucket = self.buckets[index]
-        node = bucket.head
-        if node is not None and node.data[0] == key:
-            bucket.delete(node.data)
-        raise KeyError('Deletion failed. Key not found: {}'.format())
+        current_node = bucket.head
+        # current_node = bucket.find(lambda data: data[0] == key)
+        if current_node is None:
+            raise KeyError('Deletion failed. Key not found: {}'.format())
+        else:
+            bucket.delete(current_node)
+        # while current_node is not None:
+        #     if current_node.data[0] == key:
+        #         bucket.delete(current_node.data)
+        #     current_node = current_node.next
+        # raise KeyError('Deletion failed. Key not found: {}'.format())
 
 
 def test_hash_table():
