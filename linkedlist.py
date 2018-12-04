@@ -51,17 +51,17 @@ class LinkedList(object):
         """Return a boolean indicating whether this linked list is empty."""
         return self.head is None
 
-    def length(self): #O(n), loop over each node and increment +1, then return; directly proportional to the number of loops required. This fxn could have alg. analysis of O(1) if it got value of .size property instead. (car vs. teleport)
+    def length(self):
         """Return the length of this linked list by traversing its nodes.
-        TODO: Running time: O(n) because numerical variable. Why and under what conditions?"""
+        TODO: Running time: O(n) because of incremented numerical variable in for loop. The returned counter is directly proportional to the number of loops required. If this function instead returned value of a .size property, it could have an algorithmic analysis of 0(1). Analogically, the presented function is driving a car, while opting to return value of a .size property is teleportation."""
         counter = 0 #initialize counter
         for item in self.items():
             counter += 1
         return counter
 
-    def append(self, item): #O(1), change tail.next and .tail - not dependent on any dynamic factors
+    def append(self, item):
         """Insert the given item at the tail of this linked list.
-        TODO: Running time: O(1) Why and under what conditions?"""
+        TODO: Running time: O(1) because this function is not dependent on any dynamic factors. Simply change tail.next and .tail"""
         # TODO: Create new node to hold given item
         # TODO: Append node after tail, if it exists
         node = Node(item)
@@ -72,9 +72,9 @@ class LinkedList(object):
             self.tail.next = node #Previous tail points us in the direction of new node
             self.tail = node #Set tail to node
 
-    def prepend(self, item): #O(1), change .head and node.next - not dependent on any dynamic factors
+    def prepend(self, item):
         """Insert the given item at the head of this linked list.
-        TODO: Running time: O(???) Why and under what conditions?"""
+        TODO: Running time: O(1) because this function is not dependent on any dynamic factors. Simply change .head and node.next. The reasoning here is identical to that of the append function directly above"""
         node = Node(item)
         if self.is_empty():
             self.head = node
@@ -83,28 +83,34 @@ class LinkedList(object):
             node.next = self.head
             self.head = node
 
-    def find(self, quality): #Best: O(1) if looking for item @ or near head node. Worst: O(n) if looking for item @ or near tail OR not in list at all
+    def find(self, quality):
         """Return an item from this linked list satisfying the given quality.
-        TODO: Best case running time: O(???) Why and under what conditions?
-        TODO: Worst case running time: O(???) Why and under what conditions?"""
+        TODO: Best case running time: O(1) if looking for item at or near head node because it doesn't need to check through numerous individual nodes before reaching the item where quality(item) is True
+        TODO: Worst case running time: O(n) if looking for item at or near tail OR not in list at all. This would necessitate looping through many individual nodes, thereby increasing running time"""
         # TODO: Loop through all nodes to find item where quality(item) is True
         # TODO: Check if node's data satisfies given quality function
-        if self.is_empty():
-            print("{} is not in linked list".format(quality))
-            return None
-        else: #Linked list isn't empty
-            current_node = self.head
-            for i in range(0, self.length()):
-                if quality(current_node.data): #Quality: Are conditions being met?
-                    return current_node.data
-                else: #Those conditions aren't being met? Let's keep going until they are
-                    current_node = current_node.next
-            return current_node
+        node = self.head
+        while node is not None:
+            if quality(node.data):
+                return node.data
+            else:
+                node = node.next
+        return None
 
-    def delete(self, item): #Size: 0 -> error, 1 -> easy, 2 -> extra stuff that either makes it the best or worst just like in find fxn
+    def find_node(self, quality):
+        node = self.head
+        while node is not None:
+            if quality(node.data):
+                return node
+            else:
+                node = node.next
+        return None
+
+    def delete(self, item):
         """Delete the given item from this linked list, or raise ValueError.
-        TODO: Best case running time: O(???) Why and under what conditions?
-        TODO: Worst case running time: O(???) Why and under what conditions?"""
+        TODO: Best case running time: O(1) if [self.is_empty() because it is a single step with constant runtime] OR [the node whose data matches given item is at or near head node. This means traversing through relatively few nodes and requiring a constant amount of running time]
+        TODO: Worst case running time: O(n) if the node whose data matches given item is at or near tail OR not in list at all. The function needs to keep looping until it lands on the target node, and this drives up running timeself.
+        WORTH NOTING: The reasoning for delete function's best and worst running times are just like those of the find function (directly above), except for the option of NO (or 0) running time in delete function, because no analagous "if" statement exists in the find function."""
         # TODO: Loop through all nodes to find one whose data matches given item
         # TODO: Update previous node to skip around node with matching data
         # TODO: Otherwise raise error to tell user that delete has failed
