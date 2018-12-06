@@ -4,6 +4,16 @@ from linkedlist import LinkedList
 
 
 class HashTable(object):
+    #In all algorithmic analyses:
+    # n = number of entries (key-value pair) in whole bucket. NOT THE SAME AS N IN LINKEDLIST.PY! NOT! THE SAME!!
+    # b = number of buckets (linked list)
+    # l = average length of each bucket, or n/b
+    # Oh! .contains fxn - read, maybe? ; .get fxn - read ; .set fxn - create/update; .delete fxn - delete. CRUD applies!
+    # These all take order l time in the worst case, which is why we want to keep l low.
+    # They all deal with a single thing at a time, while .length() and .items() deal with everything at once, making them slower
+    # IF USING FOR LOOPS IN THOSE FOUR CRUD OPERATIONS, FIND A WAY TO WORK WITHOUT THEM.
+
+    # We're using tuples because a tuple of size 2 will just have 2 chunks of memory, while using a list will set aside 8 chunks with just 2 filled. Wasteful. Slow.
 
     def __init__(self, init_size=8):
         """Initialize this hash table with the given initial size."""
@@ -26,7 +36,7 @@ class HashTable(object):
 
     def keys(self):
         """Return a list of all keys in this hash table.
-        TODO: Running time: O(1) due to absence of dynamic factors. Running time is therefore constant."""
+        Running time: O(1) due to absence of dynamic factors. Running time is therefore constant."""
         # Collect all keys in each bucket
         all_keys = []
         for bucket in self.buckets:
@@ -36,7 +46,7 @@ class HashTable(object):
 
     def values(self):
         """Return a list of all values in this hash table.
-        TODO: Running time: O(1) because appending takes constant time."""
+        Running time: O(1) because appending takes constant time. Appending takes constant time because in a linked list, we always have a tail node, which makes "finding" where to append very fast."""
         # TODO: Loop through all buckets
         # TODO: Collect all values in each bucket
         all_values = []
@@ -47,43 +57,46 @@ class HashTable(object):
 
     def items(self):
         """Return a list of all items (key-value pairs) in this hash table.
-        TODO: Running time: O(n) because extending takes linear time. n = length of list being added. I don't actually understand this conceptually. This answer is based on the Python Wiki. https://wiki.python.org/moin/TimeComplexity"""
+        Running time: O(n) because O(b) and O(l) combine to O(b*l) which simplifies to O(n), for the same reason as is detailed in length function
+        This function has a GUARANTEED runtime of O(n) n o matter what you do """
         # Collect all pairs of key-value entries in each bucket
+        # Python Wiki. https://wiki.python.org/moin/TimeComplexity
         all_items = []
-        for bucket in self.buckets:
-            all_items.extend(bucket.items())
+        for bucket in self.buckets: #This will take O(b) time
+            all_items.extend(bucket.items()) #Allows list to expand to a new size just one time, instead of appending once at a time. bucket.items() is O(l). And .extend is also an O(l) operation, based on the length of the list being added to the preexisting... thing. O(l) + O(l) = O(2l) squiggly = O(l) !
         return all_items
 
     def length(self):
         """Return the number of key-value entries by traversing its buckets.
-        TODO: Running time: O(n^2) because the running time is directly dependent on the number of buckets and the number of key-value entries in each of those buckets. (Not certain about this one)"""
+        Running time (when using bucket.length() rather than bucket.[size property]): O(b*l) where b is the number of buckets and l is the average length of each bucket. Of course O(b*l) reduces to O(n) because l = n/b. If using size property correctly, the running time would be O(b) instead, which is faster.
+        This function can have runtime of O(n) OR O(n), depending"""
+        entry_count = 0 #initialize this counter
         # TODO: Loop through all buckets
-        # TODO: Count number of key-value entries in each bucket
-        entry_count = 0 #initialize this leetle counter
         for bucket in self.buckets:
+            # TODO: Count number of key-value entries in each bucket
             entry_count += bucket.length()
         return entry_count
 
-    def contains(self, key):
+    def contains(self, key): #Lucia's code did it differently, check it out
         """Return True if this hash table contains the given key, or False.
-        TODO: Best case running time: O(1) because of the if loop. n = average length of lists (load factor: [# of key, value entries]/[# of buckets]). This best case will stand if we're looking for an item at or near the head node.
-        TODO: Worst case running time: O(n) because of the while loop. This worst case will stand if we're looking for an item at or near the tail node. When looking at the while and if loops together, the runtime is O(n + 1), which is simplified to O(n) because of the relative small size of the constant."""
+        BEST case running time: O(1) because of the if loop. This best case will stand if we're looking for an item at or near the head node.
+        WORST case running time: O(l) because of the while loop. l = average length of lists (load factor: [# of (key, value) entries]/[# of buckets]). This worst case will stand if we're looking for an item at or near the tail node. When looking at the while and if loops together, the runtime is O(n + 1), which is simplified to O(n) because of the relative small size of the constant."""
         # TODO: Find bucket where given key belongs
         # TODO: Check if key-value entry exists in bucket
-        index = self._bucket_index(key)
-        bucket = self.buckets[index]
+        index = self._bucket_index(key) #O(1) because hash fxn is very fast
+        bucket = self.buckets[index] #O(1) because indexing arrays is very constant
         current_node = bucket.head
         while current_node is not None:
             if current_node.data[0] == key: # [0] for key and [1] for value bc tuple inside node.data
                 return True
-            current_node = current_node.next # Set to next node so that while loop continues
-        return False #false is returned if current_node is None OR if node.data[0] !== key
+            current_node = current_node.next # Set to next node so that our while loop continues
+        return False # False is returned if current_node is None OR if node.data[0] !== key
 
     def get(self, key): #Running time: same as contains
         """Return the value associated with the given key, or raise KeyError.
-        TODO: Best case running time: [O(1) if the target node is located at or near the head node. This function must loop through the nodes in the bucket until it finds a match, so proximity to the head node yields shorter runtime]; [O[1] if key is not found. A KeyError is raised; this takes constant time because no dynamic input is required.]
-        TODO: Worst case running time: O(n) if the target node is located at or near the head node OR does not exist. Since the function must loop through a great quantity of nodes to either find the matching node or to ascertain the absence of such a match, greater runtime is required.
-        WORTH NOTING: Similar logic implemented in algorithmic analysis for both this get function and the contains function directly above"""
+        BEST case running time: [O(1) if the target node is located at or near the head node. This function must loop through the nodes in the bucket until it finds a match, so proximity to the head node yields shorter runtime]; [O[1] if key is not found. A KeyError is raised; this takes constant time because no dynamic input is required.]
+        WORST case running time: O(l) if the target node is located at or near the head node OR does not exist. Since the function must loop through a great quantity of nodes to either find the matching node or to ascertain the absence of such a match, greater runtime is required.
+        WORTH NOTING: Similar logic in algorithmic analysis for both this get function and the contains function directly above"""
         # TODO: Find bucket where given key belongs
         # TODO: Check if key-value entry exists in bucket
         # TODO: If found, return value associated with given key
@@ -98,19 +111,28 @@ class HashTable(object):
 
     def set(self, key, value):
         """Insert or update the given key with its associated value.
-        TODO: Best case running time: [O(1) should the conditions of the if statement not be met. The function will append the (key, value) pair to bucket. This takes constant time]; [O(1) should the conditions of the if statement be met AND should the target node be at or near the head node. Fewer nodes to loop through --> decreased runtime.]
-        TODO: Worst case running time: O(n) should the conditions of the if statement be met AND should the target node be at or near the tail node. More nodes to loop through --> increased runtime."""
+        BEST case running time: [O(1) should the conditions of the if statement not be met. The function will append the (key, value) pair to bucket. This takes constant time]; [O(1) should the conditions of the if statement be met AND should the target node be at or near the head node. Fewer nodes to loop through --> decreased runtime.]
+        WORST case running time: O(l) should the conditions of the if statement be met AND should the target node be at or near the tail node. More nodes to loop through --> increased runtime."""
         # TODO: Find bucket where given key belongs
         # TODO: Check if key-value entry exists in bucket
         # TODO: If found, update value associated with given key
         # TODO: Otherwise, insert given key-value entry into bucket
         index = self._bucket_index(key)
         bucket = self.buckets[index]
-        if bucket.find(lambda tuple: tuple[0] == key) is not None:
-            node = bucket.find_node(lambda tuple: tuple[0] == key)
-            node.data = (key, value)
-        else:
-            bucket.append((key, value))
+        entry = bucket.find(lambda tuple: tuple[0] == key)
+        # English for above line: It means the bucket.find lambda function didn't come back with nothing, it came back with something - that's why we say "is not None"
+        if entry is not None: #O(l), in which l is based on the bucket.find. As bucket.find is dynamically variable, this line of code will have a linear running time.
+            bucket.delete(entry)
+        bucket.append((key, value))
+
+        # THIS IS BAD AND DANGEROUS
+        # index = self._bucket_index(key)
+        # bucket = self.buckets[index]
+        # if bucket.find(lambda tuple: tuple[0] == key) is not None:
+        #     node = bucket.find_node(lambda tuple: tuple[0] == key)
+        #     node.data = (key, value) <--SPECIFICALLY THIS IS BAD AND DANGEROUS
+        # else:
+        #     bucket.append((key, value))
 
         # index = self._bucket_index(key)
         # bucket = self.buckets[index]
@@ -130,8 +152,8 @@ class HashTable(object):
 
     def delete(self, key):
         """Delete the given key from this hash table, or raise KeyError.
-        TODO: Best case running time: [O[1] should the conditions of the if statement not be met. The function raises KeyError, which requires no dynamically changing variable input and thus requires constant runtime]; [O[1] should the conditions of the if statement be met AND should the target node be at or near the head node. Fewer nodes to loop through --> decreased runtime]
-        TODO: Worst case running time: O(n) should the conditions of the if statement be met AND should the target node be at or near the tail node. More nodes to loop through --> increased runtime """
+        BEST case running time: [O[1] should the conditions of the if statement not be met. The function raises KeyError, which requires no dynamically changing variable input and thus requires constant runtime]; [O[1] should the conditions of the if statement be met AND should the target node be at or near the head node. Fewer nodes to loop through --> decreased runtime]
+        WORST case running time: O(n) should the conditions of the if statement be met AND should the target node be at or near the tail node. More nodes to loop through --> increased runtime """
         # TODO: Find bucket where given key belongs
         # TODO: Check if key-value entry exists in bucket
         # TODO: If found, delete entry associated with given key

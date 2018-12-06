@@ -13,6 +13,7 @@ class Node(object):
 
 
 class LinkedList(object):
+    #In all algorithmic analyses, n = number of nodes, or items, in linked list
 
     def __init__(self, items=None):
         """Initialize this linked list and append the given items, if any."""

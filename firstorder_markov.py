@@ -1,4 +1,4 @@
-# To run in terminal, type: "python3" + "markov.py" + file name
+# To run in terminal, type: "python3" + "firstorder_markov.py" + file name
 from dictogram import Dictogram
 
 class Markov(Dictogram): #Takes dictionary histogram (dictogram) --> dictionary of dictograms of words after a word
