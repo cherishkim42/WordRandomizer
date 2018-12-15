@@ -1,4 +1,4 @@
-# To run in terminal, type: "python3" + "firstorder_markov.py" + file name
+# To run in terminal, type: "python3" + "markov_firstorder.py" + file name
 from dictogram import Dictogram
 
 class Markov(Dictogram): #Takes dictionary histogram (dictogram) --> dictionary of dictograms of words after a word
@@ -7,7 +7,7 @@ class Markov(Dictogram): #Takes dictionary histogram (dictogram) --> dictionary 
         super(Markov, self).__init__()
         if words is not None:
             words_length = len(words)
-            for word_index in range(words_length - 1): #Final index has no subsequent word, so it's not included
+            for word_index in range(words_length - 1): #Final index lacks subsequent word, so it's not included
                 self.add_count(words[word_index],words[word_index+1])
 
     def add_count(self, word, next_word):
@@ -20,7 +20,6 @@ class Markov(Dictogram): #Takes dictionary histogram (dictogram) --> dictionary 
             self[word] = {next_word:1} #New entry entirely
 
     def frequency(self, word, next_word):
-        """Return # times next_word follows word, or 0 if never."""
         if next_word in self[word]: #Whenever [word][next_word] exists....
             return self[word][next_word] #...returns the # of times that happens
         else: #If [word][next_word] just never happens....

@@ -117,22 +117,24 @@ class HashTable(object):
         # TODO: Check if key-value entry exists in bucket
         # TODO: If found, update value associated with given key
         # TODO: Otherwise, insert given key-value entry into bucket
-        index = self._bucket_index(key)
-        bucket = self.buckets[index]
-        entry = bucket.find(lambda tuple: tuple[0] == key)
-        # English for above line: It means the bucket.find lambda function didn't come back with nothing, it came back with something - that's why we say "is not None"
-        if entry is not None: #O(l), in which l is based on the bucket.find. As bucket.find is dynamically variable, this line of code will have a linear running time.
-            bucket.delete(entry)
-        bucket.append((key, value))
 
-        # THIS IS BAD AND DANGEROUS
         # index = self._bucket_index(key)
         # bucket = self.buckets[index]
-        # if bucket.find(lambda tuple: tuple[0] == key) is not None:
-        #     node = bucket.find_node(lambda tuple: tuple[0] == key)
-        #     node.data = (key, value) <--SPECIFICALLY THIS IS BAD AND DANGEROUS
-        # else:
-        #     bucket.append((key, value))
+        # entry = bucket.find(lambda tuple: tuple[0] == key)
+        # # English for above line: It means the bucket.find lambda function didn't come back with nothing, it came back with something - that's why we say "is not None"
+        # if entry is not None: #O(l), in which l is based on the bucket.find. As bucket.find is dynamically variable, this line of code will have a linear running time.
+        #     bucket.replace(entry, (key, value))
+        # bucket.append((key, value))
+
+        # THIS IS BAD AND DANGEROUS
+        # Passes tests, so we're trying it *for now* - when entirety of project is functional and running, come back and use without nodes
+        index = self._bucket_index(key)
+        bucket = self.buckets[index]
+        if bucket.find(lambda tuple: tuple[0] == key) is not None:
+            node = bucket.find_node(lambda tuple: tuple[0] == key)
+            node.data = (key, value) #<--SPECIFICALLY THIS IS BAD AND DANGEROUS
+        else:
+            bucket.append((key, value))
 
         # index = self._bucket_index(key)
         # bucket = self.buckets[index]

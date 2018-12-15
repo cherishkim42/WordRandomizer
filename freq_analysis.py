@@ -25,6 +25,18 @@ def random_word(histogram):
         else:
             continue #Must be continue, not pass, because continue makes the fxn iterate again. Pass concludes with no return.
 
+def weighted_random(histogram):
+    counter = 0 #Initialize counter
+    total_frequency_list = histogram.values()
+    total_frequency_number = 0 #Tallied up frequency
+    for frequency in total_frequency_list:
+        total_frequency_number += frequency
+    random_count = random.randrange(0, total_frequency_number)
+    for key,value in histogram.items():
+        counter += value
+        if counter > random_count:
+            return key
+
 # This returns histogram with ratio of (instances of a word):(number of words in entire corpus)
 # Still need to figure out how to print ratios as proper fractions, but purely mathematically, this is ok
 def word_freq(histogram):
@@ -34,12 +46,5 @@ def word_freq(histogram):
     return histogram
 
 if __name__ == '__main__':
-    print(word_freq(histogram()))
-
-#Nvm not going to use this
-#Takes in histogram func and returns number of types (unique words) by counting the keys, since histogram has already divvied it all up for us by (type):(# of appearances)
-# def types(histogram):
-#     type_count = 0
-#     for key in histogram:
-#         type_count += 1
-#     return type_count
+    # print(word_freq(histogram()))
+    print(weighted_random(histogram()))
