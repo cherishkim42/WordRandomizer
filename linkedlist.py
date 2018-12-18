@@ -54,7 +54,7 @@ class LinkedList(object):
 
     def length(self):
         """Return the length of this linked list by traversing its nodes.
-        TODO: Running time: O(n) because of incremented numerical variable in for loop. The returned counter is directly proportional to the number of loops required. If this function instead returned value of a .size property, it could have an algorithmic analysis of 0(1). Analogically, the presented function is driving a car, while opting to return value of a .size property is teleportation."""
+        Running time: O(n) because of incremented numerical variable in for loop. The returned counter is directly proportional to the number of loops required. If this function instead returned value of a .size property, it could have an algorithmic analysis of 0(1). Analogically, the presented function is driving a car, while opting to return value of a .size property is teleportation."""
         counter = 0 #initialize counter
         for item in self.items():
             counter += 1
@@ -62,10 +62,8 @@ class LinkedList(object):
 
     def append(self, item):
         """Insert the given item at the tail of this linked list.
-        TODO: Running time: O(1) because this function is not dependent on any dynamic factors. Simply change tail.next and .tail"""
-        # TODO: Create new node to hold given item
-        # TODO: Append node after tail, if it exists
-        node = Node(item)
+        Running time: O(1) because this function is not dependent on any dynamic factors. Simply change tail.next and .tail"""
+        node = Node(item) #Creates new node to hold passed-in item
         if self.is_empty():
             self.head = node
             self.tail = node #If a linked list has 1 item, the node refers to tail as well as head
@@ -75,7 +73,7 @@ class LinkedList(object):
 
     def prepend(self, item):
         """Insert the given item at the head of this linked list.
-        TODO: Running time: O(1) because this function is not dependent on any dynamic factors. Simply change .head and node.next. The reasoning here is identical to that of the append function directly above"""
+        Running time: O(1) because this function is not dependent on any dynamic factors. Simply change .head and node.next. The reasoning here is identical to that of the append function directly above"""
         node = Node(item)
         if self.is_empty():
             self.head = node
@@ -86,16 +84,14 @@ class LinkedList(object):
 
     def find(self, quality):
         """Return an item from this linked list satisfying the given quality.
-        TODO: Best case running time: O(1) if looking for item at or near head node because it doesn't need to check through numerous individual nodes before reaching the item where quality(item) is True
-        TODO: Worst case running time: O(n) if looking for item at or near tail OR not in list at all. This would necessitate looping through many individual nodes, thereby increasing running time"""
-        # TODO: Loop through all nodes to find item where quality(item) is True
-        # TODO: Check if node's data satisfies given quality function
+        Best case running time: O(1) if looking for item at or near head node because it doesn't need to check through numerous individual nodes before reaching the item where quality(item) is True
+        Worst case running time: O(n) if looking for item at or near tail OR not in list at all. This would necessitate looping through many individual nodes, thereby increasing running time"""
         node = self.head
         while node is not None:
-            if quality(node.data):
-                return node.data
-            else:
-                node = node.next
+            if quality(node.data): #If quality(node.data) is true in this node...
+                return node.data #....return it!
+            else: #And if not?
+                node = node.next #Continue, thank you, next
         return None
 
     def find_node(self, quality):
@@ -109,8 +105,8 @@ class LinkedList(object):
 
     def delete(self, item):
         """Delete the given item from this linked list, or raise ValueError.
-        TODO: Best case running time: O(1) if [self.is_empty() because it is a single step with constant runtime] OR [the node whose data matches given item is at or near head node. This means traversing through relatively few nodes and requiring a constant amount of running time]
-        TODO: Worst case running time: O(n) if the node whose data matches given item is at or near tail OR not in list at all. The function needs to keep looping until it lands on the target node, and this drives up running timeself.
+        Best case running time: O(1) if [self.is_empty() because it is a single step with constant runtime] OR [the node whose data matches given item is at or near head node. This means traversing through relatively few nodes and requiring a constant amount of running time]
+        Worst case running time: O(n) if the node whose data matches given item is at or near tail OR not in list at all. The function needs to keep looping until it lands on the target node, and this drives up running timeself.
         WORTH NOTING: The reasoning for delete function's best and worst running times are just like those of the find function (directly above), except for the option of NO (or 0) running time in delete function, because no analagous "if" statement exists in the find function."""
         # TODO: Loop through all nodes to find one whose data matches given item
         # TODO: Update previous node to skip around node with matching data

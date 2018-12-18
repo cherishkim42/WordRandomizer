@@ -37,60 +37,54 @@ class HashTable(object):
     def keys(self):
         """Return a list of all keys in this hash table.
         Running time: O(1) due to absence of dynamic factors. Running time is therefore constant."""
-        # Collect all keys in each bucket
-        all_keys = []
-        for bucket in self.buckets:
+        all_keys = [] #Initialize empty list
+        for bucket in self.buckets: #Iterate through all buckets in .sef
             for key, value in bucket.items():
-                all_keys.append(key)
+                all_keys.append(key) #Fill list with keys
         return all_keys
 
     def values(self):
         """Return a list of all values in this hash table.
         Running time: O(1) because appending takes constant time. Appending takes constant time because in a linked list, we always have a tail node, which makes "finding" where to append very fast."""
-        # TODO: Loop through all buckets
-        # TODO: Collect all values in each bucket
-        all_values = []
-        for bucket in self.buckets:
+        all_values = [] #Initialize empty list
+        for bucket in self.buckets: #Iterate through all buckets in .self
             for key, value in bucket.items():
-                all_values.append(value)
+                all_values.append(value) #Fill list with values
         return all_values
 
     def items(self):
         """Return a list of all items (key-value pairs) in this hash table.
-        Running time: O(n) because O(b) and O(l) combine to O(b*l) which simplifies to O(n), for the same reason as is detailed in length function
-        This function has a GUARANTEED runtime of O(n) n o matter what you do """
+        Running time: O(n) because O(b) and O(l) combine to O(b*l) which simplifies to O(n), for the same reason as is detailed in length function.
+        This function has a GUARANTEED runtime of O(n) no matter what you do """
         # Collect all pairs of key-value entries in each bucket
         # Python Wiki. https://wiki.python.org/moin/TimeComplexity
-        all_items = []
+        all_items = [] #Initialize empty list
         for bucket in self.buckets: #This will take O(b) time
-            all_items.extend(bucket.items()) #Allows list to expand to a new size just one time, instead of appending once at a time. bucket.items() is O(l). And .extend is also an O(l) operation, based on the length of the list being added to the preexisting... thing. O(l) + O(l) = O(2l) squiggly = O(l) !
+            all_items.extend(bucket.items()) #Allows list to expand to a new size just one time, instead of appending once at a time. bucket.items() is O(l). And .extend is also an O(l) operation, based on the length of the list being added to the preexisting... thing. O(l) + O(l) = O(2l), which is essentially = O(l) !
         return all_items
 
     def length(self):
         """Return the number of key-value entries by traversing its buckets.
         Running time (when using bucket.length() rather than bucket.[size property]): O(b*l) where b is the number of buckets and l is the average length of each bucket. Of course O(b*l) reduces to O(n) because l = n/b. If using size property correctly, the running time would be O(b) instead, which is faster.
         This function can have runtime of O(n) OR O(n), depending"""
-        entry_count = 0 #initialize this counter
-        # TODO: Loop through all buckets
-        for bucket in self.buckets:
+        entry_count = 0 #Initialize this counter
+        for bucket in self.buckets: #Iterate through buckets
             # TODO: Count number of key-value entries in each bucket
-            entry_count += bucket.length()
+            entry_count += bucket.length() #Adds number of key-value entries to counter
         return entry_count
 
-    def contains(self, key): #Lucia's code did it differently, check it out
+    def contains(self, key):
         """Return True if this hash table contains the given key, or False.
         BEST case running time: O(1) because of the if loop. This best case will stand if we're looking for an item at or near the head node.
         WORST case running time: O(l) because of the while loop. l = average length of lists (load factor: [# of (key, value) entries]/[# of buckets]). This worst case will stand if we're looking for an item at or near the tail node. When looking at the while and if loops together, the runtime is O(n + 1), which is simplified to O(n) because of the relative small size of the constant."""
-        # TODO: Find bucket where given key belongs
-        # TODO: Check if key-value entry exists in bucket
         index = self._bucket_index(key) #O(1) because hash fxn is very fast
         bucket = self.buckets[index] #O(1) because indexing arrays is very constant
         current_node = bucket.head
         while current_node is not None:
-            if current_node.data[0] == key: # [0] for key and [1] for value bc tuple inside node.data
-                return True
-            current_node = current_node.next # Set to next node so that our while loop continues
-        return False # False is returned if current_node is None OR if node.data[0] !== key
+            if current_node.data[0] == key: # [0] for key and [1] for value bc there is a tuple inside node.data
+                return True #Dingdingding, key has been found! So return True
+            current_node = current_node.next # Set to next node so that our while loop continues if True was not returned
+        return False # False is returned if current_node is None OR if node.data[0] !== key for all the while loop's iterations
 
     def get(self, key): #Running time: same as contains
         """Return the value associated with the given key, or raise KeyError.

@@ -27,15 +27,15 @@ def random_word(histogram):
 
 def weighted_random(histogram):
     counter = 0 #Initialize counter
-    total_frequency_list = histogram.values()
-    total_frequency_number = 0 #Tallied up frequency
-    for frequency in total_frequency_list:
-        total_frequency_number += frequency
+    total_frequency_list = histogram.values() #.values() returns all values from passed-in histogram
+    total_frequency_number = 0 #Tallied up frequency. Initialize
+    for frequency in total_frequency_list: #Iterate through each value
+        total_frequency_number += frequency #For each value, add to tallied-up frequency
     random_count = random.randrange(0, total_frequency_number)
-    for key,value in histogram.items():
-        counter += value
-        if counter > random_count:
-            return key
+    for key,value in histogram.items(): #Iterate through key, value pairs in histogram; .items() returns all key, value pairs
+        counter += value #Add value to already-instantiated counter
+        if counter > random_count: #Compare counter value to this random number...
+            return key #....thus keys appearing more frequently are more likely to be returned
 
 # This returns histogram with ratio of (instances of a word):(number of words in entire corpus)
 # Still need to figure out how to print ratios as proper fractions, but purely mathematically, this is ok

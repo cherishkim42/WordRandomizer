@@ -9,5 +9,4 @@ app = Flask(__name__)
 @app.route('/')
 def main():
     random_chain = markov_nthorder.main()
-    # return render_template("structure.html", sentence = random_chain)
-    return "RANDOMIZED BIBLICAL TEXT: " + '\n' + random_chain
+    return "RANDOMIZED BIBLICAL TEXT: " + random_chain

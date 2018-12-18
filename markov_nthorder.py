@@ -1,4 +1,4 @@
-'''To run in terminal, type: "python3" + "markov_nthorder.py". Default length of output set to 20'''
+'''There are two options for running this file. (1) To view in browser, open terminal and type: "export FLASK_APP=hello.py". Then type "flask run". Terminal will then say "* Running on http://127.0.0.1:5000/". Navigate to http://127.0.0.1:5000/ in browser. (2) To run solely in terminal, see comments added to random_output method in Markov class and global main function. Once those changes are made, type the following into terminal: "python3" + "markov_nthorder.py" + filename + desired output length. Default length of output is set to 20'''
 import sys, random
 from dictogram import Dictogram
 from freq_analysis import weighted_random
@@ -23,12 +23,12 @@ class Markov(dict):
             self[key] = Dictogram([value])
 
     def random_output(self, text_list):
-        # output_length = int(sys.argv[2]) #
+        # output_length = int(sys.argv[2]) #Uncomment this and comment out the following line if you want to run the file in terminal. To do so you also need to alter the global main() function - see the comments there to see what to uncomment and comment. When running in terminal, type: "python3" + "markov_nthorder.py" + filename + desired output length.
         output_length = 20 #Change this number to tweak length of output
-        string = ""
+        string = "" #Initialize string
         random_word = random.choice(list(self)) #Picks random key
-        next_word = weighted_random(self[random_word])
-        string = string + ' '.join(random_word) + ' ' + next_word
+        next_word = weighted_random(self[random_word]) #Passes this random key in as histogram to weighted_random fxn from freq_analysis.py
+        string = string + ' '.join(random_word) + ' ' + next_word #Update string
 
         for i in range(output_length - self.order - 1):
             ephem = list(random_word) #get it? short for ephemeral
@@ -36,7 +36,7 @@ class Markov(dict):
             random_word = tuple(ephem)
             try:
                 next_word = weighted_random(self[string])
-            except KeyError:
+            except KeyError: #Try again
                 random_word = random.choice(list(self))
                 next_word = weighted_random(self[random_word])
             while next_word == None:

@@ -17,7 +17,6 @@ class Listogram(list):
 
     def add_count(self, word, count=1):
         """Increase frequency count of given word by given count amount."""
-        # TODO: Increase word frequency by count
         if word in self:
             index = self._index(word)
             word_and_count = self[index]
@@ -39,7 +38,6 @@ class Listogram(list):
 
     def __contains__(self, word):
         """Return boolean indicating if given word is in this histogram."""
-        # TODO: Check if word is in this histogram
         for word_and_count in self:
             if word_and_count[0] == word:
                 return True
@@ -50,7 +48,6 @@ class Listogram(list):
     def _index(self, target):
         """Return the index of entry containing given target word if found in
         this histogram, or None if target word is not found."""
-        # TODO: Implement linear search to find index of entry with target word
         index = 0
         for word_and_count in self:
             if word_and_count[0] == target:
