@@ -1,3 +1,7 @@
+# Recommended by Jasmine Humbert in https://medium.com/@jasmine.yhumbert/how-to-get-your-flask-app-running-on-heroku-892030811c0f
+env
+*.pyc
+
 # Created by https://www.gitignore.io/api/macos,python
 
 ### macOS ###
